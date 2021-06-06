@@ -16,9 +16,13 @@ function showSuccess(input) {
   formContorl.className = 'form-control success'
 }
 
-function validateEmail(email) {
+function checkEmial(input) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return re.test(String(email).toLowerCase())
+  if (re.test(input.value)) {
+    showSuccess(input)
+  } else {
+    showError(input, 'Email is not valid.')
+  }
 }
 
 function checkRequired(inputArr) {
@@ -31,6 +35,20 @@ function checkRequired(inputArr) {
   })
 }
 
+function checkLength(input, min, max) {
+  if (input.value.length < min) {
+    showError(input, `${correcName(input)} ${min} ta kiritilishi kerak.`)
+  } else if (input.value.length > max) {
+    showError(input, `${correcName(input)} ${max} ta kiritilishi kerak.`)
+  }
+}
+
+function checkPassword(input1, input2) {
+  if (input1.value !== input2.value) {
+    showError(input2, `Parol mos emas`)
+  }
+}
+
 function correcName(input) {
   return input.id.charAt(0).toUpperCase() + input.id.slice(1).toLowerCase()
 }
@@ -39,6 +57,10 @@ formEl.addEventListener('submit', (e) => {
   e.preventDefault()
 
   checkRequired([usernameEl, emailEl, parol1El, parol2El])
+  checkLength(usernameEl, 3, 15)
+  checkLength(parol1El, 6, 15)
+  checkEmial(emailEl)
+  checkPassword(parol1El, parol2El)
 })
 
 /*if (usernameEl.value === '') {
